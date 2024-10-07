@@ -1,0 +1,17 @@
+Comparison of mean ADC of PMT 14 before and after resistors installed.
+	Run 1989	Run 
+Pixel	Mean	Sigma	Mean	Sigma
+2	299.9	67.6
+3	629.5	154.3
+4	697.7	169.5
+5	399.8	108.9
+6	416.5	92.4
+7	472.5	95.2
+8	849.5	191.8
+9	392.4	92.2
+10	286.9	73.0
+11	437.3	96.6
+12	689.6	151.4
+13	582.5	119.8
+14	424.7	90.9
+15	440.5	120.0
