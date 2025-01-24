@@ -1,6 +1,0 @@
-[submodule "CDetMC"]
-	path = CDetMC
-	url = https://github.com/brash99/CDetMC.git
-[submodule "g4sbs"]
-	path = g4sbs
-	url = https://github.com/brash99/g4sbs.git
