@@ -1,156 +1,160 @@
 import numpy as np
 
+# Read arrays for module number, PMT number, and pixel number
+# from single CSV file
+
+# Read in the data from the CSV file
+data = np.genfromtxt('unusedPixels_parsed.csv',
+                     delimiter=',', skip_header=1)
+
+# Get the number of rows and columns in the data
+rows, cols = data.shape
+
+# Initialize the channel counter
 chan_counter = 0
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter = chan_counter + 1
-    print("## ROC 63 Slot 3")
 
-chan_counter2 = chan_counter
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter2 = chan_counter2 + 1
-    print("## ROC 63 Slot 4")
+NumPaddles = 16
+NumBars = 14
+NumSides = 2
+NumLayers = 2
+NumModules = 3
 
-chan_counter3 = chan_counter2
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter2 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter3 = chan_counter3 + 1
-    print("## ROC 63 Slot 5")
+# Geometry parameters
+length_paddle = 0.51 # 51 cm length
+bar_thickness = 0.073 # 14 bars => 73 mm
+mirror_thickness = 0.007 # 5mm mirros + 1mm gap on either side
+yoffset = 0.15 # horizontal offset of subgroups relative to module center
+zpos_ecal = 8.00
+layer1_offset = 0.25
+layer2_offset = 0.15
 
-chan_counter4 = chan_counter3
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter3 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter4 = chan_counter4 + 1
-    print("## ROC 63 Slot 6")
 
-chan_counter5 = chan_counter4
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter4 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter5 = chan_counter5 + 1
-    print("## ROC 63 Slot 7")
+####################################### Nothing below here should change ###############
+NumPaddlesPerSide = NumBars*(NumPaddles-2)*NumModules
+xthickness = bar_thickness/NumBars;
+xoffset = -1.0*xthickness*NumPaddlesPerSide/2.0
 
-chan_counter6 = chan_counter5
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter5 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter6 = chan_counter6 + 1
-    print("## ROC 63 Slot 8")
+yleft = length_paddle/2.0 + mirror_thickness/2.0 
+yright = -yleft
 
-chan_counter7 = chan_counter6
-for j in range(12):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter6 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter7 = chan_counter7 + 1
-    print("## ROC 63 Slot 9")
+zpos1 = zpos_ecal - layer1_offset
+zpos2 = zpos_ecal - layer2_offset
 
-chan_counter8 = chan_counter7
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter7 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter8 = chan_counter8 + 1
-    print("## ROC 63 Slot 10")
+# Print the xpos values for the CDET
 
-chan_counter9 = chan_counter8
-for j in range(6):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter8 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter9 = chan_counter9 + 1
-    print("## ROC 63 Slot 10")
+missingcounter = 0
+print("earm.cdet.xpos = ")
+for layer in range(NumLayers):
+    for side in range(NumSides):
+        #print("Missing Pixels = ", missingcounter)
+        missingcounter = 0
+        for module in range(NumModules):
+            localmodule = module + NumModules*layer
+            for bar in range(NumBars):
+                for paddle in range(NumPaddles):
+                    # Search for the rows that match the current module, and PMT number
+                    module_rows = data[np.where(data[:,0] == localmodule+1)]
+                    flag = False
+                    for row in module_rows:
+                        if row[1] == side+1:
+                            if row[2] == bar+1:
+                                if row[3] == paddle+1:
+                                    #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                    xpos = 999.0
+                                    missingcounter = missingcounter + 1
+                                    flag = True
 
-chan_counter10 = chan_counter9 + 96
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter9 + 96 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter10 = chan_counter10 + 1
-    print("## ROC 63 Slot 13")
+                    if (not flag):
+                        paddlenumber = (bar + NumBars*module)*NumPaddles + paddle
+                        sectionoffset = (2*layer + side)*NumPaddlesPerSide
+                        #if (xpos == 999.0):
+                        #    print(f"***{paddlenumber + sectionoffset}***",end='')
+                        xpos = xoffset + xthickness*paddlenumber - xthickness*missingcounter
 
-chan_counter11 = chan_counter10 + 128
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter10 + 128 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter11 = chan_counter11 + 1
-    print("## ROC 63 Slot 14")
 
-chan_counter12 = chan_counter9
-for j in range(6):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter9 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter12 = chan_counter12 + 1
-    print("## ROC 63 Slot 14")
 
-chan_counter13 = chan_counter10
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter10 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter13 = chan_counter13 + 1
-    print("## ROC 63 Slot 15")
+                    # print xpos, with no newline
+                    print(f"{xpos:.3f} ",end='')
 
-chan_counter14 = chan_counter11
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter11 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter14 = chan_counter14 + 1
-    print("## ROC 63 Slot 16")
+                print()
 
-chan_counter15 = chan_counter14 + 128
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter14 + 128 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter15 = chan_counter15 + 1
-    print("## ROC 63 Slot 16")
+print()
+print("earm.cdet.ypos = ")
+for layer in range(NumLayers):
+    for side in range(NumSides):
+        for module in range(NumModules):
+            #print(f"Layer {layer} Side {side} Module {module}")
+            localmodule = module + NumModules*layer
+            for bar in range(NumBars):
+                ypos = 10.0
+                for paddle in range(NumPaddles):
+                    if (module == 0):
+                        if (bar <= NumBars/2):
+                            if side == 0:
+                                ypos = yleft-yoffset
+                            else:
+                                ypos = yright-yoffset
+                        else:
+                            if side == 0:
+                                ypos = yleft
+                            else:
+                                ypos = yright
 
-chan_counter16 = chan_counter14
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter14 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter16 = chan_counter16 + 1
-    print("## ROC 63 Slot 17")
+                    if module == 1:
+                        if side == 0:
+                            ypos = yleft+yoffset
+                        else:
+                            ypos = yright+yoffset
 
-chan_counter17 = chan_counter16 + 192
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter16 + 192 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter17 = chan_counter17 + 1
-    print("## ROC 63 Slot 17")
+                    if (module == 2):
+                        if (bar <= NumBars/2):
+                            if side == 0:
+                                ypos = yleft
+                            else:
+                                ypos = yright
+                        else:
+                            if side == 0:
+                                ypos = yleft-yoffset
+                            else:
+                                ypos = yright-yoffset
 
-chan_counter18 = chan_counter15
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter15 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter18 = chan_counter18 + 1
-    print("## ROC 63 Slot 18")
+                    # Search for the rows that match the current module, and PMT number
+                    module_rows = data[np.where(data[:,0] == localmodule+1)]
+                    for row in module_rows:
+                        if row[1] == side+1:
+                            if row[2] == bar+1:
+                                if row[3] == paddle+1:
+                                    #print(f"Module {localmodule} Bar {bar} Pixel {paddle}")
+                                    ypos = 999.0
+                                    continue
 
-chan_counter19 = chan_counter18 + 192
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter18 + 192 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter19 = chan_counter19 + 1
-    print("## ROC 63 Slot 18")
+                    # print ypos, with no newline
+                    print(f"{ypos:.3f} ",end='')
 
-chan_counter20 = chan_counter18 + 64
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter18 + 64 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter20 = chan_counter20 + 1
-    print("## ROC 63 Slot 19")
+                print()
 
-chan_counter21 = chan_counter20 + 192
-for j in range(4):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter20 + 192 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter21 = chan_counter21 + 1
-    print("## ROC 63 Slot 19")
+print()
+print("earm.cdet.zpos = ")
+for layer in range(NumLayers):
+    for side in range(NumSides):
+        for module in range(NumModules):
+            for bar in range(NumBars):
+                for paddle in range(NumPaddles):
+                    if (layer == 0):
+                        zpos = zpos1
+                    else:
+                        zpos = zpos2
 
-chan_counter22 = chan_counter19
-for j in range(8):
-    for i in range(16):
-        print(f"%0.2f " % ((((chan_counter19 + 16*j + i)//672)%2)*0.50-0.25),end='')
-        chan_counter22 = chan_counter22 + 1
-    print("## ROC 63 Slot 13")
+                    # Search for the rows that match the current module, and PMT number
+                    module_rows = data[np.where(data[:,0] == module+1)]
+                    for row in module_rows:
+                        if row[1] == side+1:
+                            if row[2] == bar+1:
+                                if row[3] == paddle+1:
+                                    #print(f"Module {module} Bar {bar} Pixel {paddle}")
+                                    zpos = 999.0
+                                    continue
 
+                    # print zpos, with no newline
+                    print(f"{zpos:.3f} ",end='')
+                print()
