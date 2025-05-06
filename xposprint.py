@@ -56,7 +56,7 @@ for layer in range(NumLayers):
                     module_rows = data[np.where(data[:,0] == localmodule+1)]
                     flag = False
                     for row in module_rows:
-                        if row[1] == side+1:
+                        if row[1] == 2-side:
                             if row[2] == bar+1:
                                 if row[3] == paddle+1:
                                     #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
@@ -121,7 +121,7 @@ for layer in range(NumLayers):
                     # Search for the rows that match the current module, and PMT number
                     module_rows = data[np.where(data[:,0] == localmodule+1)]
                     for row in module_rows:
-                        if row[1] == side+1:
+                        if row[1] == 2-side:
                             if row[2] == bar+1:
                                 if row[3] == paddle+1:
                                     #print(f"Module {localmodule} Bar {bar} Pixel {paddle}")
@@ -148,7 +148,7 @@ for layer in range(NumLayers):
                     # Search for the rows that match the current module, and PMT number
                     module_rows = data[np.where(data[:,0] == module+1)]
                     for row in module_rows:
-                        if row[1] == side+1:
+                        if row[1] == 2-side:
                             if row[2] == bar+1:
                                 if row[3] == paddle+1:
                                     #print(f"Module {module} Bar {bar} Pixel {paddle}")
