@@ -57,12 +57,19 @@ for layer in range(NumLayers):
                     flag = False
                     for row in module_rows:
                         if row[1] == 2-side:
-                            if row[2] == bar+1:
-                                if row[3] == paddle+1:
-                                    #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
-                                    xpos = 999.0
-                                    missingcounter = missingcounter + 1
-                                    flag = True
+                            if row[2] == 14-bar:
+                                if side==0:
+                                    if row[3] == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        xpos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
+                                else:
+                                    if (17-row[3]) == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        xpos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
 
                     if (not flag):
                         paddlenumber = (bar + NumBars*module)*NumPaddles + paddle
@@ -74,9 +81,14 @@ for layer in range(NumLayers):
 
 
                     # print xpos, with no newline
-                    print(f"{xpos:.3f} ",end='')
+                    print(f"{-xpos:.3f} ",end='')
 
                 print()
+
+        for refj in range(3):
+            for ref in range(16):
+                print("0.0 ",end='')
+            print()
 
 print()
 print("earm.cdet.ypos = ")
@@ -122,16 +134,29 @@ for layer in range(NumLayers):
                     module_rows = data[np.where(data[:,0] == localmodule+1)]
                     for row in module_rows:
                         if row[1] == 2-side:
-                            if row[2] == bar+1:
-                                if row[3] == paddle+1:
-                                    #print(f"Module {localmodule} Bar {bar} Pixel {paddle}")
-                                    ypos = 999.0
-                                    continue
+                            if row[2] == 14-bar:
+                                if side==0:
+                                    if row[3] == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        ypos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
+                                else:
+                                    if (17-row[3]) == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        ypos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
 
                     # print ypos, with no newline
                     print(f"{ypos:.3f} ",end='')
 
                 print()
+        
+        for refj in range(3):
+            for ref in range(16):
+                print("0.0 ",end='')
+            print()
 
 print()
 print("earm.cdet.zpos = ")
@@ -149,12 +174,25 @@ for layer in range(NumLayers):
                     module_rows = data[np.where(data[:,0] == module+1)]
                     for row in module_rows:
                         if row[1] == 2-side:
-                            if row[2] == bar+1:
-                                if row[3] == paddle+1:
-                                    #print(f"Module {module} Bar {bar} Pixel {paddle}")
-                                    zpos = 999.0
-                                    continue
+                            if row[2] == 14-bar:
+                                if side==0:
+                                    if row[3] == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        zpos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
+                                else:
+                                    if (17-row[3]) == paddle+1:
+                                        #print(f"Module {localmodule} Side {side} Bar {bar} Pixel {paddle}")
+                                        zpos = -999.0
+                                        missingcounter = missingcounter + 1
+                                        flag = True
 
                     # print zpos, with no newline
                     print(f"{zpos:.3f} ",end='')
                 print()
+        
+        for refj in range(3):
+            for ref in range(16):
+                print("0.0 ",end='')
+            print()
