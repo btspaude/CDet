@@ -85,10 +85,10 @@ for layer in range(NumLayers):
 
                 print()
 
-        for refj in range(3):
-            for ref in range(16):
-                print("0.0 ",end='')
-            print()
+for refj in range(1):
+    for ref in range(16):
+        print("999.000 ",end='')
+    print()
 
 print()
 print("earm.cdet.ypos = ")
@@ -153,16 +153,18 @@ for layer in range(NumLayers):
 
                 print()
         
-        for refj in range(3):
-            for ref in range(16):
-                print("0.0 ",end='')
-            print()
+for refj in range(1):
+    for ref in range(16):
+        print("999.000 ",end='')
+    print()
 
 print()
 print("earm.cdet.zpos = ")
 for layer in range(NumLayers):
     for side in range(NumSides):
+        missingcounter = 0
         for module in range(NumModules):
+            localmodule = module + NumModules*layer
             for bar in range(NumBars):
                 for paddle in range(NumPaddles):
                     if (layer == 0):
@@ -171,7 +173,8 @@ for layer in range(NumLayers):
                         zpos = zpos2
 
                     # Search for the rows that match the current module, and PMT number
-                    module_rows = data[np.where(data[:,0] == module+1)]
+                    module_rows = data[np.where(data[:,0] == localmodule+1)]
+                    flag = False
                     for row in module_rows:
                         if row[1] == 2-side:
                             if row[2] == 14-bar:
@@ -192,7 +195,7 @@ for layer in range(NumLayers):
                     print(f"{zpos:.3f} ",end='')
                 print()
         
-        for refj in range(3):
-            for ref in range(16):
-                print("0.0 ",end='')
-            print()
+for refj in range(1):
+    for ref in range(16):
+        print("999.000 ",end='')
+print()
