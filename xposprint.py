@@ -24,7 +24,7 @@ length_paddle = 0.51 # 51 cm length
 bar_thickness = 0.073 # 14 bars => 73 mm
 mirror_thickness = 0.007 # 5mm mirros + 1mm gap on either side
 yoffset = 0.075 # horizontal offset of subgroups relative to module center
-zpos_ecal = 8.00
+zpos_ecal = 6.00
 layer1_offset = 0.25
 layer2_offset = 0.15
 
