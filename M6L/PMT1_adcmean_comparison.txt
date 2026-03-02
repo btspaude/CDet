@@ -1,4 +1,4 @@
-Comparison of mean ADC of PMT 1 before and after resistors installed.
+omparison of mean ADC of PMT 1 before and after resistors installed.
 	Run 1994	Run 
 Pixel	Mean	Sigma	Mean	Sigma
 1   	445.78	158.7 	
